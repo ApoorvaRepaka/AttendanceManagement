@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <th:block th:replace="~{layout :: layout(~{::content})}">
+        <th:block th:fragment="content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="page-title">Dashboard</h2>
+                    <p class="page-subtitle">Welcome to Attendance Management System</p>
+                </div>
+                <span class="badge bg-success" style="font-size: 12px; padding: 8px 14px;" sec:authentication="principal.authorities">Role</span>
+            </div>
+
+            <div class="row g-4 mb-4">
+                <div class="col-md-4" sec:authorize="hasAnyRole('ADMIN', 'TEACHER')">
+                    <div class="card h-100">
+                        <div class="card-body text-center py-5">
+                            <div style="width: 70px; height: 70px; background: rgba(46, 200, 102, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                                <i class="bi bi-people-fill" style="font-size: 2rem; color: #2ec866;"></i>
+                            </div>
+                            <h5 class="mb-2">Students</h5>
+                            <p class="text-muted mb-4" style="font-size: 14px;">Manage student records and information</p>
+                            <a href="/students" class="btn btn-primary">
+                                View Students <i class="bi bi-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4" sec:authorize="hasAnyRole('ADMIN', 'TEACHER')">
+                    <div class="card h-100">
+                        <div class="card-body text-center py-5">
+                            <div style="width: 70px; height: 70px; background: rgba(52, 152, 219, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                                <i class="bi bi-clipboard-check-fill" style="font-size: 2rem; color: #3498db;"></i>
+                            </div>
+                            <h5 class="mb-2">Attendance</h5>
+                            <p class="text-muted mb-4" style="font-size: 14px;">Mark and track student attendance</p>
+                            <a href="/attendance" class="btn btn-primary">
+                                Manage Attendance <i class="bi bi-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4" sec:authorize="hasRole('ADMIN')">
+                    <div class="card h-100">
+                        <div class="card-body text-center py-5">
+                            <div style="width: 70px; height: 70px; background: rgba(245, 166, 35, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                                <i class="bi bi-person-fill-gear" style="font-size: 2rem; color: #f5a623;"></i>
+                            </div>
+                            <h5 class="mb-2">Users</h5>
+                            <p class="text-muted mb-4" style="font-size: 14px;">Manage system users and roles</p>
+                            <a href="/users" class="btn btn-primary">
+                                Manage Users <i class="bi bi-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4" sec:authorize="hasAnyRole('ADMIN', 'TEACHER')">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="bi bi-lightning-fill me-2" style="color: #f5a623;"></i>Quick Actions
+                        </div>
+                        <div class="card-body">
+                            <div class="d-grid gap-3">
+                                <a href="/attendance/mark" class="btn btn-outline-primary text-start">
+                                    <i class="bi bi-plus-circle me-2"></i>Mark Individual Attendance
+                                </a>
+                                <a href="/attendance/bulk" class="btn btn-outline-primary text-start">
+                                    <i class="bi bi-list-check me-2"></i>Mark Bulk Attendance
+                                </a>
+                                <a href="/students/new" class="btn btn-outline-primary text-start">
+                                    <i class="bi bi-person-plus me-2"></i>Add New Student
+                                </a>
+                                <a href="/attendance/report" class="btn btn-outline-primary text-start">
+                                    <i class="bi bi-bar-chart me-2"></i>Generate Report
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="bi bi-info-circle-fill me-2" style="color: #3498db;"></i>System Information
+                        </div>
+                        <div class="card-body p-0">
+                            <table class="table mb-0">
+                                <tbody>
+                                    <tr>
+                                        <td class="text-muted" style="width: 40%;">Current Date</td>
+                                        <td class="text-end fw-bold" th:text="${#temporals.format(#temporals.createNow(), 'dd MMM yyyy')}">Date</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted">Your Role</td>
+                                        <td class="text-end fw-bold" sec:authentication="principal.authorities">Role</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted">Email</td>
+                                        <td class="text-end fw-bold" sec:authentication="name">Email</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-muted">Status</td>
+                                        <td class="text-end">
+                                            <span class="badge badge-present">Active</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </th:block>
+    </th:block>
+</body>
+</html>
